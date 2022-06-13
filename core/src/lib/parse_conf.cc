@@ -104,31 +104,30 @@ ConfigurationParser::ConfigurationParser(
     SaveResourceCb_t SaveResourceCb,
     DumpResourceCb_t DumpResourceCb,
     FreeResourceCb_t FreeResourceCb)
-    : ConfigurationParser()
+    : cf_{cf == nullptr ? "" : cf}
+    , scan_error_{ScanError}
+    , scan_warning_{scan_warning}
+    , init_res_{init_res}
+    , store_res_{StoreRes}
+    , print_res_{print_res}
+    , err_type_{err_type}
+    , r_num_{r_num}
+    , resource_definitions_{resource_definitions}
+    , SaveResourceCb_{SaveResourceCb}
+    , DumpResourceCb_{DumpResourceCb}
+    , FreeResourceCb_{FreeResourceCb}
+    , config_default_filename_{config_default_filename == nullptr
+                                   ? ""
+                                   : config_default_filename}
+    , use_config_include_dir_{false}
+    , config_include_naming_format_{"%s/%s/%s.conf"}
+    , ParseConfigBeforeCb_{ParseConfigBeforeCb}
+    , ParseConfigReadyCb_{ParseConfigReadyCb}
 {
-  cf_ = cf == nullptr ? "" : cf;
-  use_config_include_dir_ = false;
-  config_include_naming_format_ = "%s/%s/%s.conf";
-  scan_error_ = ScanError;
-  scan_warning_ = scan_warning;
-  init_res_ = init_res;
-  store_res_ = StoreRes;
-  print_res_ = print_res;
-  err_type_ = err_type;
-  r_num_ = r_num;
-  resource_definitions_ = resource_definitions;
   config_resources_container_.reset(new ConfigResourcesContainer(this));
-  config_default_filename_
-      = config_default_filename == nullptr ? "" : config_default_filename;
-  config_include_dir_ = config_include_dir == nullptr ? "" : config_include_dir;
-  ParseConfigBeforeCb_ = ParseConfigBeforeCb;
-  ParseConfigReadyCb_ = ParseConfigReadyCb;
   ASSERT(SaveResourceCb);
   ASSERT(DumpResourceCb);
   ASSERT(FreeResourceCb);
-  SaveResourceCb_ = SaveResourceCb;
-  DumpResourceCb_ = DumpResourceCb;
-  FreeResourceCb_ = FreeResourceCb;
 }
 
 void ConfigurationParser::InitializeQualifiedResourceNameTypeConverter(
